@@ -4,7 +4,8 @@ import useWindowResize from "./hooks/useWindowResize";
 import demo from "./tools/demo";
 import Records from "./utils/records";
 import logger from "./utils/logger";
-import hand from "./tools/hand";
+import handTool from "./tools/hand";
+import rectTool from "./tools/rect";
 
 export default function App() {
   const [tool, setTool] = useState<TOOLS>(TOOLS.HAND);
@@ -34,10 +35,10 @@ export default function App() {
     if (!canvasRef.current) return;
     switch (tool) {
       case TOOLS.HAND:
-        hand(e, canvasRef.current);
+        handTool(e, canvasRef.current);
         break;
       case TOOLS.RECT:
-        // TODO
+        rectTool(e, canvasRef.current);
         break;
       default:
         Records.repaint(canvasRef.current);

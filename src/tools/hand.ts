@@ -40,7 +40,8 @@ function onMouseMove(e: MouseEvent) {
   drawBorder(selectedRecord);
 }
 
-export default function hand(
+/** 抓取工具 */
+export default function handTool(
   e: React.MouseEvent<HTMLCanvasElement>,
   canvas: HTMLCanvasElement
 ) {
