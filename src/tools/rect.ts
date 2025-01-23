@@ -1,5 +1,5 @@
 import { IRect, Shape } from "../types";
-import Records, { IRecord } from "../utils/records";
+import Records, { IRecord } from "../utils/Records";
 
 let rectangle: IRecord | null = null;
 

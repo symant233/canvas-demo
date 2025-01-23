@@ -1,7 +1,7 @@
 import { IRect, Shape } from "../types";
 import { getContext2d } from "../utils/canvas";
 import logger from "../utils/logger";
-import Records, { IRecord } from "../utils/records";
+import Records, { IRecord } from "../utils/Records";
 
 const BORDER_OFFSET = 5;
 let selectedRecord: IRecord | null = null; // 选中的记录

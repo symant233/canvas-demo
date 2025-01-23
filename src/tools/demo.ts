@@ -1,5 +1,5 @@
 import { Shape } from "../types";
-import Records from "../utils/records";
+import Records from "../utils/Records";
 
 /** Canvas 初始化 demo 绘制 */
 export default function demo(cv: HTMLCanvasElement) {

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { TOOLS } from "./types";
 import useWindowResize from "./hooks/useWindowResize";
 import demo from "./tools/demo";
-import Records from "./utils/records";
+import Records from "./utils/Records";
 import logger from "./utils/logger";
 import handTool from "./tools/hand";
 import rectTool from "./tools/rect";
