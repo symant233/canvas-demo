@@ -13,7 +13,7 @@ export type IRecord = {
 
 /** Canvas 管理图形位置等信息的记录 */
 class Records {
-  private records: IRecord[] = [];
+  private records: IRecord[] = []; // 记录数组，层级从高到低
 
   /** 添加记录 */
   addRecord(record: Omit<IRecord, "id">) {
@@ -42,7 +42,9 @@ class Records {
   changeRecordById(id: string, record: Partial<IRecord>) {
     const index = this.records.findIndex((record) => record.id === id);
     if (index === -1) return;
-    this.records[index] = { ...this.records[index], ...record };
+    let editingRecord = this.records.splice(index, 1)[0];
+    editingRecord = { ...editingRecord, ...record };
+    this.records.unshift(editingRecord); // 移动到绘制顶层
     logger(`Change record: ${JSON.stringify(record)}`);
   }
 

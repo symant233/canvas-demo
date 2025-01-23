@@ -36,7 +36,11 @@ export default function App() {
       case TOOLS.HAND:
         hand(e, canvasRef.current);
         break;
+      case TOOLS.RECT:
+        // TODO
+        break;
       default:
+        Records.repaint(canvasRef.current);
         break;
     }
   };
