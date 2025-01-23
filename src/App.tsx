@@ -1,23 +1,45 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { TOOLS } from "./types";
 import useWindowResize from "./hooks/useWindowResize";
+import demo from "./tools/demo";
+import Records from "./utils/records";
+import logger from "./utils/logger";
+import hand from "./tools/hand";
 
 export default function App() {
-  const [tool, setTool] = useState<TOOLS>();
+  const [tool, setTool] = useState<TOOLS>(TOOLS.HAND);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const handleToolSelect = (tool: TOOLS) => {
+  const handleToolSelect = useCallback((tool: TOOLS) => {
     setTool(tool);
-  };
+  }, []);
 
-  const handleCanvasResize = () => {
+  const handleCanvasResize = useCallback(() => {
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth;
       canvasRef.current.height = window.innerHeight;
+      Records.repaint(canvasRef.current);
     }
-  };
+  }, []);
 
   useWindowResize(handleCanvasResize);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    demo(canvasRef.current);
+  }, []);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    logger(`Mouse down: ${e.clientX}, ${e.clientY}, current tool: ${tool}`);
+    if (!canvasRef.current) return;
+    switch (tool) {
+      case TOOLS.HAND:
+        hand(e, canvasRef.current);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <>
@@ -33,7 +55,15 @@ export default function App() {
         ))}
       </div>
 
-      <canvas id="canvas" ref={canvasRef}></canvas>
+      <canvas
+        id="canvas"
+        ref={canvasRef}
+        onMouseDown={handleMouseDown}
+        width={window.innerWidth}
+        height={window.innerHeight}
+      ></canvas>
+
+      <div className="logger"></div>
     </>
   );
 }

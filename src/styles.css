@@ -3,6 +3,7 @@ body {
   overflow: hidden;
   background-color: rgb(13 17 23);
   color: white;
+  font-size: 12px;
 }
 
 .canvas-tools {
@@ -16,7 +17,6 @@ body {
   background-color: #c8f4ff43;
   padding: 4px 8px;
   border-radius: 8px;
-  font-size: 12px;
 
   .tool {
     cursor: pointer;
@@ -26,4 +26,19 @@ body {
   .tool.active {
     background-color: rgba(198, 255, 212, 0.375);
   }
+}
+
+.logger {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  max-height: 100px;
+  width: 100%;
+  overflow-y: scroll;
+  border-top: 1px solid #3c3c3c;
+  padding: 0 10px 10px 10px;
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
 }
