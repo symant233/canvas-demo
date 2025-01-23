@@ -5,6 +5,7 @@ import Records, { IRecord } from "../utils/Records";
 
 const BORDER_OFFSET = 5;
 let selectedRecord: IRecord | null = null; // 选中的记录
+let mouseDownOffset: { x: number; y: number } | null = null; // 鼠标按下时的偏移
 
 function drawBorder(record: IRecord) {
   const ctx = getContext2d();
@@ -24,13 +25,13 @@ function drawBorder(record: IRecord) {
 }
 
 function onMouseMove(e: MouseEvent) {
-  const { movementX, movementY } = e;
-  if (!selectedRecord) return;
+  const { clientX, clientY } = e;
+  if (!selectedRecord || !mouseDownOffset) return;
 
   selectedRecord.data = {
     ...selectedRecord.data,
-    x: (selectedRecord.data as IRect).x + movementX,
-    y: (selectedRecord.data as IRect).y + movementY,
+    x: clientX - mouseDownOffset.x,
+    y: clientY - mouseDownOffset.y,
   };
 
   Records.changeRecordById(selectedRecord.id, {
@@ -50,6 +51,10 @@ export default function handTool(
   logger(`Hand tool: ${JSON.stringify(record)}`);
 
   if (record) {
+    mouseDownOffset = {
+      x: clientX - (record.data as IRect).x,
+      y: clientY - (record.data as IRect).y,
+    };
     Records.repaint();
     drawBorder(record);
     canvas.addEventListener("mousemove", onMouseMove);
