@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: rgb(13 17 23);
+  color: white;
+}
+
+.canvas-tools {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  user-select: none;
+  background-color: #c8f4ff43;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+
+  .tool {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
+  .tool.active {
+    background-color: rgba(198, 255, 212, 0.375);
+  }
+}
