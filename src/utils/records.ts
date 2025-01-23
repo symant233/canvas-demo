@@ -9,48 +9,56 @@ export type IRecord = {
   data: IShapeData[Shape];
   fillStyle?: string;
   strokeStyle?: string;
+  children?: string[];
+  modifiedAt?: number;
 };
 
 /** Canvas 管理图形位置等信息的记录 */
 class Records {
-  private records: IRecord[] = []; // 记录数组，层级从高到低
+  private recordsMap = new Map<string, IRecord>(); // 记录映射，通过 id 获取记录
 
   /** 添加记录 */
   addRecord(record: Omit<IRecord, "id">) {
-    const _record = { ...record, id: generateRandomId() };
-    this.records.unshift(_record);
+    const _record: IRecord = {
+      ...record,
+      id: generateRandomId(),
+      modifiedAt: Date.now(),
+    };
+    this.recordsMap.set(_record.id, _record);
     logger(`Add record: ${JSON.stringify(record)}`);
     return _record;
   }
 
   /** 清空记录 */
   clearRecords() {
-    this.records = [];
+    this.recordsMap.clear();
     logger("Clear records");
   }
 
   /** 通过 id 获取记录 */
   getRecordById(id: string) {
-    return this.records.find((record) => record.id === id);
+    return this.recordsMap.get(id);
   }
 
   /** 获取记录 */
-  getRecords() {
-    return this.records;
+  getRecordsArray() {
+    return Array.from(this.recordsMap.values());
   }
 
   changeRecordById(id: string, record: Partial<IRecord>) {
-    const index = this.records.findIndex((record) => record.id === id);
-    if (index === -1) return;
-    let editingRecord = this.records.splice(index, 1)[0];
-    editingRecord = { ...editingRecord, ...record };
-    this.records.unshift(editingRecord); // 移动到绘制顶层
+    const editingRecord = this.getRecordById(id);
+    if (!editingRecord) return;
+    this.recordsMap.set(id, {
+      ...editingRecord,
+      ...record,
+      modifiedAt: Date.now(),
+    });
     logger(`Change record: ${JSON.stringify(record)}`);
   }
 
   /** 获取指定坐标的首个记录 */
   getPointRecord(clientX: number, clientY: number) {
-    for (const record of this.records) {
+    for (const record of this.getRecordsArray()) {
       if (record.type === Shape.Rect) {
         const { x, y, width, height } = record.data as IRect;
         if (
@@ -72,9 +80,10 @@ class Records {
     }
     const ctx = canvas.getContext("2d")!;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const records: IRecord[] = this.getRecordsArray();
     // 倒序重绘
-    for (let index = this.records.length - 1; index >= 0; index--) {
-      const record = this.records[index];
+    for (let index = records.length - 1; index >= 0; index--) {
+      const record = records[index];
       switch (record.type) {
         case Shape.Rect: {
           const { x, y, width, height } = record.data as IRect;
