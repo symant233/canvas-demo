@@ -1,4 +1,5 @@
 import { Shape } from "../types";
+import { drawChildrenLines } from "../utils/canvas";
 import Records from "../utils/Records";
 
 /** Canvas 初始化 demo 绘制 */
@@ -26,6 +27,7 @@ export default function demo(cv: HTMLCanvasElement) {
   );
   ctx.restore();
 
+  Records.clearRecords();
   const r1 = Records.addRecord({
     type: Shape.Rect,
     data: rectangle,
@@ -37,10 +39,12 @@ export default function demo(cv: HTMLCanvasElement) {
     fillStyle: fillStyle2,
     children: [r1.id],
   });
-  Records.addRecord({
+  const r3 = Records.addRecord({
     type: Shape.Rect,
     data: rectangle3,
     strokeStyle,
     children: [r2.id],
   });
+  drawChildrenLines(r3);
+  drawChildrenLines(r2);
 }

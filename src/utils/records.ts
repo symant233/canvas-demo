@@ -1,5 +1,5 @@
 import { Shape, IShapeData, IRect } from "../types";
-import { getCanvas } from "./canvas";
+import { drawChildrenLines, getCanvas } from "./canvas";
 import generateRandomId from "./id";
 import logger from "./logger";
 
@@ -101,6 +101,9 @@ class Records {
             ctx.fillRect(x, y, width, height);
           }
           ctx.restore();
+          if (record.children) {
+            drawChildrenLines(record);
+          }
           break;
         }
         default:
