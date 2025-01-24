@@ -10,7 +10,7 @@ export type IRecord = {
   fillStyle?: string;
   strokeStyle?: string;
   children?: string[];
-  modifiedAt?: number;
+  modifiedAt: number;
 };
 
 /** Canvas 管理图形位置等信息的记录 */
@@ -18,7 +18,7 @@ class Records {
   private recordsMap = new Map<string, IRecord>(); // 记录映射，通过 id 获取记录
 
   /** 添加记录 */
-  addRecord(record: Omit<IRecord, "id">) {
+  addRecord(record: Omit<IRecord, "id" & "modifiedAt">) {
     const _record: IRecord = {
       ...record,
       id: generateRandomId(),
@@ -40,9 +40,11 @@ class Records {
     return this.recordsMap.get(id);
   }
 
-  /** 获取记录 */
+  /** 获取记录，以 */
   getRecordsArray() {
-    return Array.from(this.recordsMap.values());
+    return Array.from(this.recordsMap.values()).sort(
+      (a, b) => b.modifiedAt - a.modifiedAt
+    );
   }
 
   changeRecordById(id: string, record: Partial<IRecord>) {
@@ -74,6 +76,7 @@ class Records {
     return null;
   }
 
+  /** 重绘所有内容 */
   repaint(canvas?: HTMLCanvasElement) {
     if (!canvas) {
       canvas = getCanvas();

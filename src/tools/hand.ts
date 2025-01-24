@@ -64,7 +64,7 @@ export default function handTool(
       canvas.removeEventListener("mouseup", mouseUpListener);
     };
     canvas.addEventListener("mouseup", mouseUpListener);
-  } else {
+  } else if (selectedRecord) {
     // 清除选中，重绘清除边框
     selectedRecord = null;
     Records.repaint(canvas);
