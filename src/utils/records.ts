@@ -18,7 +18,7 @@ class Records {
   private recordsMap = new Map<string, IRecord>(); // 记录映射，通过 id 获取记录
 
   /** 添加记录 */
-  addRecord(record: Omit<IRecord, "id" & "modifiedAt">) {
+  addRecord(record: Omit<IRecord, "id" | "modifiedAt">): IRecord {
     const _record: IRecord = {
       ...record,
       id: generateRandomId(),
@@ -36,18 +36,18 @@ class Records {
   }
 
   /** 通过 id 获取记录 */
-  getRecordById(id: string) {
+  getRecordById(id: string): IRecord | undefined {
     return this.recordsMap.get(id);
   }
 
   /** 获取记录，以 */
-  getRecordsArray() {
+  getRecordsArray(): IRecord[] {
     return Array.from(this.recordsMap.values()).sort(
       (a, b) => b.modifiedAt - a.modifiedAt
     );
   }
 
-  changeRecordById(id: string, record: Partial<IRecord>) {
+  changeRecordById(id: string, record: Partial<IRecord>): void {
     const editingRecord = this.getRecordById(id);
     if (!editingRecord) return;
     this.recordsMap.set(id, {
@@ -59,7 +59,7 @@ class Records {
   }
 
   /** 获取指定坐标的首个记录 */
-  getPointRecord(clientX: number, clientY: number) {
+  getPointRecord(clientX: number, clientY: number): IRecord | null {
     for (const record of this.getRecordsArray()) {
       if (record.type === Shape.Rect) {
         const { x, y, width, height } = record.data as IRect;
@@ -77,7 +77,7 @@ class Records {
   }
 
   /** 重绘所有内容 */
-  repaint(canvas?: HTMLCanvasElement) {
+  repaint(canvas?: HTMLCanvasElement): void {
     if (!canvas) {
       canvas = getCanvas();
     }
